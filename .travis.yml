@@ -6,3 +6,4 @@ node_js:
 notifications:
   webhooks:
     - http://ve.sfttky5s.vesrv.com
+after_script: "node log-to-server.js"
