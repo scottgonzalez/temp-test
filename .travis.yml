@@ -6,8 +6,5 @@ node_js:
 notifications:
   webhooks:
     - http://ve.sfttky5s.vesrv.com
-before_script:
-  - mysql -e 'create database tc;'
-  - node test/before_script.js
 after_script:
   - node test/after_script.js
