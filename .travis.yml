@@ -10,4 +10,4 @@ before_script:
   - mysql -e 'create database tc;'
   - node test/before_script.js
 after_script:
-  - node test/after_script.js"
+  - node test/after_script.js
