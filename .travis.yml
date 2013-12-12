@@ -7,6 +7,8 @@ notifications:
   irc:
     channels:
       - "chat.freenode.net#scottgonzalez"
+    template:
+      - "%{message} on %{branch} by %{author}: %{build_url}"
     skip_join: true
   webhooks:
     - http://ve.sfttky5s.vesrv.com
