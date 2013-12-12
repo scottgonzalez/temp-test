@@ -4,11 +4,11 @@ exports.foo = {
 		test.ok( true );
 		test.equal( 2 + 3, 5 );
 		test.done();
-	// },
+	},
 
-	// bad: function( test ) {
-	// 	test.expect( 1 );
-	// 	test.ok( false );
-	// 	test.done();
+	bad: function( test ) {
+		test.expect( 1 );
+		test.ok( false );
+		test.done();
 	}
 };
