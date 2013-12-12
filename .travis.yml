@@ -4,6 +4,10 @@ node_js:
   - "0.10"
   - "0.8"
 notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#scottgonzalez"
+    skip_join: true
   webhooks:
     - http://ve.sfttky5s.vesrv.com
 after_script:
