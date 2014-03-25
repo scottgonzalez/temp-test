@@ -1,4 +1,3 @@
-var fs = require( "fs" );
 
 exports.store = store;
 exports.read = read;
