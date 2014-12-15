@@ -2,9 +2,7 @@ var exec = require( "child_process" ).exec;
 
 all([
 	logEnv,
-	logCommits,
-	unitTests,
-	checkCla
+	logCommits
 ], function( errors ) {
 	if ( errors.length ) {
 		process.exit( 1 );
