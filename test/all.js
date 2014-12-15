@@ -1,7 +1,8 @@
-var fs = require( "fs" );
-var tc = require( "../tc" );
+var exec = require( "child_process" ).exec;
 
 all([
+	logEnv,
+	logCommits,
 	unitTests,
 	checkCla
 ], function( errors ) {
@@ -31,26 +32,20 @@ function all( steps, callback ) {
 	next();
 }
 
-function unitTests( callback ) {
-	var nodeunit = require( "nodeunit" );
-	var reporter = nodeunit.reporters.default;
-	var options = require( "nodeunit/bin/nodeunit.json" );
+function logEnv( callback ) {
+	console.log( process.env );
+	callback( null );
+}
 
-	reporter.run([ "test/unit" ], options, function( error ) {
+function logCommits( callback ) {
+	exec( "git log --oneline", function( error, stdout ) {
 		if ( error ) {
-			tc.store( "unittest", "failed" );
 			return callback( error );
 		}
 
-		tc.store( "unittest", "passed" );
-		callback( null );
-	});
-}
-
-function checkCla( callback ) {
-	process.nextTick(function() {
-		console.log( "CLA ok" );
-		tc.store( "cla", "passed" );
+		var commits = stdout.trim().split( "\n" );
+		console.log( commits.length + " commits:" );
+		console.log( commits );
 		callback( null );
 	});
 }
