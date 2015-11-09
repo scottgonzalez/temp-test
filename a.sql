@@ -1,2 +1,2 @@
 INSERT INTO foo
-	SET a = "b";
+	SET a = "c";
