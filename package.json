@@ -1,11 +1,10 @@
 {
   "name": "temp-test",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "test": "node test/all.js"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "mysql": "2.0.0-rc2",
     "nodeunit": "0.8.2"
