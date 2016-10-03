@@ -1,8 +1,6 @@
 language: node_js
 node_js:
   - "0.11"
-  - "0.10"
-  - "0.8"
 notifications:
   irc:
     channels:
@@ -11,7 +9,3 @@ notifications:
       - "%{author} updated the %{branch} branch of %{repository}"
       - "%{message} %{build_url}"
     skip_join: true
-  webhooks:
-    - http://ve.sfttky5s.vesrv.com
-after_script:
-  - node test/after_script.js

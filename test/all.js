@@ -1,56 +1,74 @@
-var fs = require( "fs" );
-var tc = require( "../tc" );
+var exec = require( "child_process" ).exec;
+var github = require( "github-request" );
 
-all([
-	unitTests,
-	checkCla
-], function( errors ) {
-	if ( errors.length ) {
-		process.exit( 1 );
-	}
-});
+process.env.TRAVIS_PULL_REQUEST = "3";
+process.env.TRAVIS_REPO_SLUG = "scottgonzalez/temp-test";
 
-function all( steps, callback ) {
-	var errors = [];
+function getPrCommits( callback ) {
+	var path = "/repos/" + process.env.TRAVIS_REPO_SLUG +
+		"/pulls/" + process.env.TRAVIS_PULL_REQUEST +
+		"/commits";
 
-	function next() {
-		var step = steps.shift();
-		step(function( error ) {
-			if ( error ) {
-				errors.push( error );
-			}
-
-			if ( !steps.length ) {
-				return callback( errors );
-			}
-
-			next();
-		});
-	}
-
-	next();
-}
-
-function unitTests( callback ) {
-	var nodeunit = require( "nodeunit" );
-	var reporter = nodeunit.reporters.default;
-	var options = require( "nodeunit/bin/nodeunit.json" );
-
-	reporter.run([ "test/unit" ], options, function( error ) {
+	github.requestAll({
+		path: path
+	}, function( error, commits ) {
 		if ( error ) {
-			tc.store( "unittest", "failed" );
 			return callback( error );
 		}
 
-		tc.store( "unittest", "passed" );
-		callback( null );
+		// Reduce to just SHAs
+		commits = commits.map(function( commit ) {
+			return commit.sha;
+		});
+
+		callback( null, commits );
 	});
 }
 
-function checkCla( callback ) {
-	process.nextTick(function() {
-		console.log( "CLA ok" );
-		tc.store( "cla", "passed" );
-		callback( null );
+function getPrCommitRange( callback ) {
+	getPrCommits(function( error, commits ) {
+		if ( error ) {
+			return callback( error );
+		}
+
+		var first = commits.shift();
+		var last = commits.pop();
+		var range = first + ".." + last;
+
+		callback( null, range );
 	});
 }
+
+function getLocalCommits( range, callback ) {
+	exec( "git log --oneline " + range, function( error, stdout ) {
+		if ( error ) {
+			return callback( error );
+		}
+
+		var commits = stdout.trim().split( "\n" );
+		callback( null, commits );
+	});
+}
+
+
+
+if ( !process.env.TRAVIS_PULL_REQUEST ) {
+	return;
+}
+
+getPrCommitRange(function( error, range ) {
+	if ( error ) {
+		console.error( error );
+		process.exit( 1 );
+	}
+
+	getLocalCommits( range, function( error, commits ) {
+		if ( error ) {
+			console.error( error );
+			process.exit( 1 );
+		}
+
+		console.log( commits.length + " commits:" );
+		console.log( commits );
+	});
+});

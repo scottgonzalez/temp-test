@@ -6,7 +6,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "mysql": "2.0.0-rc2",
-    "nodeunit": "0.8.2"
+    "github-request": "1.2.0"
   }
 }
